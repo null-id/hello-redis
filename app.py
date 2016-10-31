@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from rq import Queue
 from redis import Redis
-from lib.count import count_text_len
-import time
-# Tell RQ what Redis connection to use
-redis_conn = Redis()
-q = Queue(connection=redis_conn)  # no args implies the default queue
+from flask import Flask
 
-# Delay execution of count_words_at_url('http://nvie.com')
-job = q.enqueue(count_text_len, 'http://nvie.com')
-print job.result   # => None
+app = Flask(__name__)
+redis = Redis(host="127.0.0.1", port=6379)
 
-# Now, wait a while, until the worker is finished
-time.sleep(2)
-print job.result
+@app.route("/<int:id>")
+def page(id):
+    redis.incr(str(id))
+    return "page with id {0} views {1} time(s)".format(id, redis.get(str(id)))
+
+
+if __name__ == "__main__":
+    app.debug=True
+    app.run()
