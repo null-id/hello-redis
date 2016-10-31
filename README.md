@@ -12,7 +12,9 @@ hello, Redis!
 
 > * virualenv env
 * env/bin/pip install -r requirements.txt
-* run ./run-redis.sh
-* then fire app.py
-* hit [localhost://5000/1](localhost://5000/<pageid>) in this case page id = 1:
+* ./run-redis.sh
+* env/bin/python app.py
+* curl localhost:5000/1 
+
+
  
